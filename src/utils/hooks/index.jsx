@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
+import { ThemeContext } from '../context'
 
 export function useFetch(url){
 
@@ -40,3 +41,8 @@ export function useFetch(url){
 
 //const payload = await response.json();
 //const freelancersList = payload['freelancersList'];
+
+export function useTheme() {
+    const { theme, toggleTheme } = useContext(ThemeContext)
+    return { theme, toggleTheme }
+}
