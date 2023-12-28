@@ -38,7 +38,7 @@ function Header(){
             <img src={logo_dark} alt="logo de l'agence Shiny"/>
             <HeaderNav>
 
-                <StyledLink to="/">Acceuil</StyledLink>
+                <StyledLink to="/">Accueil</StyledLink>
                 <StyledLink to="/freelances">Freelances</StyledLink>
                 <StyledLink to="/survey/1" $isFullLink>
                     Faire le test

@@ -14,6 +14,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Trebuchet MS', Helvetica, sans-serif;
   }
 `;
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
