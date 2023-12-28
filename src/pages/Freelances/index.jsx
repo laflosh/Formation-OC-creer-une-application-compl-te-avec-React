@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
 import styled from "styled-components";
 import Card from '../../components/Card';
 import { Loader } from '../../utils/style/Atoms';
 import colors from '../../utils/style/colors';
+import { useFetch } from '../../utils/hooks';
 
 const CardsContainer = styled.div`
   display: grid;
@@ -35,31 +35,8 @@ const PageSubtitle = styled.h2`
 
 function Freelances(){
 
-    let [profilData, setProfilData] = useState([]);
-    let [isLoading, setIsLoading] = useState(false);
-    let [error, setError] = useState(null);
-
-    useEffect(() => {
-        async function fetchDataProfil(){
-            setIsLoading(true)
-            try{
-                const response = await fetch(`http://localhost:8000/freelances`);
-                const {freelancersList} = await response.json();
-                //const payload = await response.json();
-                //const freelancersList = payload['freelancersList'];
-                setProfilData(freelancersList);
-            }
-            catch(error){
-                console.log(error);
-                setError(true);
-            }
-            finally{
-                setIsLoading(false);
-            }
-        }
-
-        fetchDataProfil();
-    }, [])
+    const {data, isLoading, error } = useFetch(`http://localhost:8000/freelances`);
+    const {freelancersList} = data;
 
     if (error){
         return <span>Oups il y a eu un problème</span>
@@ -84,7 +61,7 @@ function Freelances(){
             ) : (
                     <CardsContainer>
                         
-                        {profilData.map((profil) => (
+                        {freelancersList.map((profil) => (
                             <Card
                             key={profil.id}
                             label={profil.job}
