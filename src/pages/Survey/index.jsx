@@ -1,8 +1,9 @@
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Loader } from "../../utils/style/Atoms";
 import styled from "styled-components";
 import colors from "../../utils/style/colors";
+import { SurveyContext } from '../../utils/context'
 
 const SurveyContainer = styled.div`
   display: flex;
@@ -29,6 +30,32 @@ const LinkWrapper = styled.div`
   }
 `;
 
+const ReplyBox = styled.button`
+  border: none;
+  height: 100px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${colors.backgroundLight};
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: ${(props) =>
+    props.isSelected ? `0px 0px 0px 2px ${colors.primary} inset` : 'none'};
+  &:first-child {
+    margin-right: 15px;
+  }
+  &:last-of-type {
+    margin-left: 15px;
+  }
+`
+
+const ReplyWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+
 function Survey(){
 
     let {questionNumber} = useParams();
@@ -38,6 +65,7 @@ function Survey(){
     let [surveyData, setSurveyData] = useState({});
     let [isDataLoading, setDataLoading] = useState(false);
     let [error, setError] = useState(null);
+    const { answers, saveAnswers } = useContext(SurveyContext)
 
     //useEffect(() =>{
     //    setDataLoading(true)
@@ -51,15 +79,16 @@ function Survey(){
     //      )
     //}, []);
 
+    function saveReply(answer) {
+      saveAnswers({ [questionNumber]: answer })
+    };
+
     useEffect(() => {
         async function fetchSurvey(){
             setDataLoading(true);
             try{
                 const response = await fetch(`http://localhost:8000/survey`);
-                console.log(response)
                 const {surveyData} = await response.json();
-                console.log(response)
-                console.log(surveyData)
                 setSurveyData(surveyData);
             }
             catch(err){
@@ -80,23 +109,47 @@ function Survey(){
     };
 
     return (
+
         <SurveyContainer>
+
           <QuestionTitle>Question {questionNumber}</QuestionTitle>
           {isDataLoading ? (
             <Loader />
           ) : (
             <QuestionContent>{surveyData[questionNumber]}</QuestionContent>
           )}
-          <LinkWrapper>
-            <Link to={`/survey/${prevQuestionNumber}`}>Précédent</Link>
-            {surveyData[questionNumberInt + 1] ? (
-              <Link to={`/survey/${nextQuestionNumber}`}>Suivant</Link>
-            ) : (
-              <Link to="/results">Résultats</Link>
-            )}
-          </LinkWrapper>
-        </SurveyContainer>
-      )
-    };
+
+        <ReplyWrapper>
+
+          <ReplyBox
+            onClick={() => saveReply(true)}
+            isSelected={answers[questionNumber] === true}
+          >
+            Oui
+          </ReplyBox>
+
+          <ReplyBox
+            onClick={() => saveReply(false)}
+            isSelected={answers[questionNumber] === false}
+          >
+            Non
+          </ReplyBox>
+
+      </ReplyWrapper>
+
+      <LinkWrapper>
+
+        <Link to={`/survey/${prevQuestionNumber}`}>Précédent</Link>
+          {surveyData[questionNumberInt + 1] ? (
+            <Link to={`/survey/${nextQuestionNumber}`}>Suivant</Link>
+          ) : (
+            <Link to="/results">Résultats</Link>
+          )}
+
+        </LinkWrapper>
+
+    </SurveyContainer>
+  )
+};
 
 export default Survey;

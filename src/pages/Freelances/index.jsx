@@ -47,9 +47,6 @@ function Freelances(){
                 const {freelancersList} = await response.json();
                 //const payload = await response.json();
                 //const freelancersList = payload['freelancersList'];
-
-                console.log(response);
-                console.log(freelancersList);
                 setProfilData(freelancersList);
             }
             catch(error){
