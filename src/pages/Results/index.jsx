@@ -81,7 +81,7 @@ function Results(){
 
     const { theme } = useContext(ThemeContext)
     const {answers} = useContext(SurveyContext);
-    const fetchParams = formatFetchParams(answers);
+    const fetchParams = formatQueryParams(answers);
 
     const {data, isLoading, error} = useFetch(
         `http://localhost:8000/results?${fetchParams}`
