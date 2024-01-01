@@ -3,6 +3,7 @@ import { SurveyContext } from "../../utils/context";
 import { StyledLink, Loader } from '../../utils/style/Atoms';
 import { useFetch } from '../../utils/hooks';
 import { ThemeContext } from '../../utils/context'
+import EmptyList from "../../components/EmptyList";
 import colors from "../../utils/style/colors";
 import styled from "styled-components";
 
@@ -94,6 +95,11 @@ function Results(){
     if (error) {
         return <span>Il y a un problème</span>
     }
+
+    if (resultsData?.length < 1) {
+      return <EmptyList theme={theme} />
+    }
+  
     
     return isLoading ? (
 
